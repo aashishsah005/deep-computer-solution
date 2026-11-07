@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import client from "../../api/client";
 import { RepairStatusBadge } from "../../components/StatusBadge";
-import SketchLoader from "../../components/SketchLoader";
+import SimpleLoader from "../../components/SimpleLoader";
 
 const STATUSES = ["Pending", "In Progress", "Completed"];
 
@@ -43,9 +43,7 @@ export default function AdminRepairs() {
       </div>
 
       {loading ? (
-        <div className="py-12 flex justify-center">
-          <SketchLoader size="sm" text="Loading repair requests…" />
-        </div>
+        <SimpleLoader size="sm" text="Loading repair requests…" />
       ) : (
         <div className="grid gap-4">
           {requests.map((r) => (

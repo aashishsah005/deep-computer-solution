@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import client from "../api/client";
 import { StockBadge } from "../components/StatusBadge";
 import WhatsAppButton from "../components/WhatsAppButton";
-import SketchLoader from "../components/SketchLoader";
+import SimpleLoader from "../components/SimpleLoader";
 import { formatPrice } from "../utils/format";
 
 export default function ProductDetail() {
@@ -18,7 +18,7 @@ export default function ProductDetail() {
   if (!product) {
     return (
       <div className="max-w-6xl mx-auto px-5 py-24 flex justify-center">
-        <SketchLoader text="Loading product details…" subtext="Deep Computer And Solution" size="md" />
+        <SimpleLoader text="Loading product details…" size="md" />
       </div>
     );
   }

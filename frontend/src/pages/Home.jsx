@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import client from "../api/client";
 import ProductCard from "../components/ProductCard";
 import WhatsAppButton from "../components/WhatsAppButton";
-import SketchLoader from "../components/SketchLoader";
+import SimpleLoader from "../components/SimpleLoader";
 import storefrontImage from "../assets/storefront.jpg";
 
 const PATHS = [
@@ -118,9 +118,7 @@ export default function Home() {
           </Link>
         </div>
         {loadingFeatured ? (
-          <div className="py-12 flex justify-center">
-            <SketchLoader text="Loading featured machines…" subtext="Deep Computer And Solution" size="sm" />
-          </div>
+          <SimpleLoader text="Loading featured machines…" size="sm" />
         ) : featured.length > 0 ? (
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {featured.map((p) => (

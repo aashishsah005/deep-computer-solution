@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import client from "../../api/client";
 import { StockBadge, RepairStatusBadge } from "../../components/StatusBadge";
-import SketchLoader from "../../components/SketchLoader";
+import SimpleLoader from "../../components/SimpleLoader";
 import { formatPrice } from "../../utils/format";
 
 const REPAIR_STATUSES = ["Pending", "In Progress", "Completed"];
@@ -87,7 +87,7 @@ export default function AdminDashboard() {
   if (loading) {
     return (
       <div className="py-24 flex justify-center">
-        <SketchLoader text="Loading dashboard data…" subtext="Deep Computer And Solution" size="md" />
+        <SimpleLoader text="Loading dashboard data…" size="md" />
       </div>
     );
   }

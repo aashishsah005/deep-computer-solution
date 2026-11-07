@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import client from "../api/client";
 import ProductCard from "../components/ProductCard";
-import SketchLoader from "../components/SketchLoader";
+import SimpleLoader from "../components/SimpleLoader";
 
 const CATEGORIES = [
   "Accessories",
@@ -80,9 +80,7 @@ export default function Products() {
       </div>
 
       {loading ? (
-        <div className="py-16 flex justify-center">
-          <SketchLoader text="Loading catalog…" subtext="Deep Computer And Solution" size="md" />
-        </div>
+        <SimpleLoader text="Loading products…" size="md" />
       ) : products.length === 0 ? (
         <div className="border border-dashed border-border rounded-lg p-12 text-center">
           <p className="text-muted">No products match these filters yet.</p>

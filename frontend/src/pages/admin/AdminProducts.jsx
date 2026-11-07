@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import client from "../../api/client";
 import { StockBadge } from "../../components/StatusBadge";
-import SketchLoader from "../../components/SketchLoader";
+import SimpleLoader from "../../components/SimpleLoader";
 import { formatPrice } from "../../utils/format";
 
 const emptyForm = {
@@ -129,9 +129,7 @@ export default function AdminProducts() {
       </form>
 
       {loading ? (
-        <div className="py-12 flex justify-center">
-          <SketchLoader size="sm" text="Loading product inventory…" />
-        </div>
+        <SimpleLoader size="sm" text="Loading product inventory…" />
       ) : (
         <>
           {/* Mobile Products Card List */}

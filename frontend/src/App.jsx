@@ -1,7 +1,9 @@
+import { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { WhatsAppFAB } from "./components/WhatsAppButton";
+import SketchLoader from "./components/SketchLoader";
 
 import Home from "./pages/Home";
 import Products from "./pages/Products";
@@ -17,8 +19,31 @@ import AdminProducts from "./pages/admin/AdminProducts";
 import AdminRepairs from "./pages/admin/AdminRepairs";
 
 export default function App() {
+  const [showSplash, setShowSplash] = useState(true);
+  const [fadeOut, setFadeOut] = useState(false);
+
+  useEffect(() => {
+    // Show sketch animation while the website initially loads, then smoothly fade out
+    const fadeTimer = setTimeout(() => setFadeOut(true), 1100);
+    const removeTimer = setTimeout(() => setShowSplash(false), 1600);
+    return () => {
+      clearTimeout(fadeTimer);
+      clearTimeout(removeTimer);
+    };
+  }, []);
+
   return (
-    <Routes>
+    <>
+      {showSplash && (
+        <div
+          className={`fixed inset-0 z-[100] flex items-center justify-center bg-base transition-opacity duration-500 ${
+            fadeOut ? "opacity-0 pointer-events-none" : "opacity-100"
+          }`}
+        >
+          <SketchLoader size="lg" text="Deep Computer And Solution" subtext="Biratnagar, Nepal" />
+        </div>
+      )}
+      <Routes>
       {/* Admin routes: own layout, no public navbar/footer */}
       <Route path="/admin/login" element={<AdminLogin />} />
       <Route path="/admin" element={<AdminLayout />}>
@@ -49,5 +74,6 @@ export default function App() {
         }
       />
     </Routes>
+    </>
   );
 }
