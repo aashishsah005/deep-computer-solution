@@ -19,13 +19,15 @@ export default function Products() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const category = searchParams.get("category") || "";
   const condition = searchParams.get("condition") || "";
   const search = searchParams.get("search") || "";
 
-  useEffect(() => {
+  const fetchProducts = () => {
     setLoading(true);
+    setError(null);
     const params = {};
     if (category) params.category = category;
     if (condition) params.condition = condition;
@@ -33,9 +35,24 @@ export default function Products() {
 
     client
       .get("/products", { params })
-      .then((res) => setProducts(res.data))
-      .catch(() => setProducts([]))
+      .then((res) => {
+        if (Array.isArray(res.data)) {
+          setProducts(res.data);
+        } else {
+          console.warn("Products API returned non-array:", res.data);
+          setProducts([]);
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to fetch products:", err);
+        setError("Unable to load products. The backend server might be waking up.");
+        setProducts([]);
+      })
       .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    fetchProducts();
   }, [category, condition, search]);
 
   const updateParam = (key, value) => {
@@ -81,6 +98,17 @@ export default function Products() {
 
       {loading ? (
         <SimpleLoader text="Loading products…" size="md" />
+      ) : error ? (
+        <div className="border border-alert/30 bg-alert/10 rounded-lg p-8 text-center max-w-md mx-auto my-8">
+          <p className="text-alert font-medium">{error}</p>
+          <p className="text-muted text-xs mt-1">If the cloud server was idle, it may take 20-30 seconds to wake up.</p>
+          <button
+            onClick={fetchProducts}
+            className="mt-4 px-4 py-2 bg-amber hover:bg-amber-dim text-black font-semibold rounded-md text-xs transition-colors"
+          >
+            Retry Loading
+          </button>
+        </div>
       ) : products.length === 0 ? (
         <div className="border border-dashed border-border rounded-lg p-12 text-center">
           <p className="text-muted">No products match these filters yet.</p>

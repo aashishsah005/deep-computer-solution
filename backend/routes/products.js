@@ -18,7 +18,11 @@ router.get("/", async (req, res, next) => {
       if (minPrice) filter.price.$gte = Number(minPrice);
       if (maxPrice) filter.price.$lte = Number(maxPrice);
     }
-    if (search) filter.$text = { $search: search };
+    if (search) {
+      const sanitized = search.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      const rgx = new RegExp(sanitized, "i");
+      filter.$or = [{ name: rgx }, { description: rgx }, { specs: rgx }, { category: rgx }];
+    }
 
     const products = await Product.find(filter).sort({ createdAt: -1 });
     res.json(products);

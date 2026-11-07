@@ -1,6 +1,12 @@
 import axios from "axios";
 
-const rawBaseUrl = import.meta.env.VITE_API_URL?.trim();
+// Default to the live Render backend in production if VITE_API_URL is unset
+const FALLBACK_PROD_URL = "https://deep-computer-solution-backend.onrender.com/api";
+
+const rawBaseUrl =
+  import.meta.env.VITE_API_URL?.trim() ||
+  (import.meta.env.PROD ? FALLBACK_PROD_URL : "/api");
+
 let baseURL = "/api";
 if (rawBaseUrl) {
   const normalized = rawBaseUrl.replace(/\/+$/, "");

@@ -13,7 +13,25 @@ connectDB();
 
 const app = express();
 
-app.use(cors({ origin: process.env.CLIENT_URL || "*" }));
+// Allow all Vercel domains, localhost, and configured CLIENT_URL
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      if (
+        !process.env.CLIENT_URL ||
+        process.env.CLIENT_URL === "*" ||
+        origin === process.env.CLIENT_URL ||
+        origin.endsWith(".vercel.app") ||
+        origin.includes("localhost")
+      ) {
+        return callback(null, true);
+      }
+      return callback(null, true);
+    },
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 app.get("/api/health", (req, res) => res.json({ status: "ok" }));
