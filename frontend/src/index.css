@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-base: #21252B;
+  --color-surface: #2B3038;
+  --color-surfacealt: #333944;
+  --color-border: #3C424C;
+  --color-ink: #F3F1EA;
+  --color-muted: #9AA0A8;
+}
+
+html[data-theme="light"] {
+  --color-base: #F8FAFC;
+  --color-surface: #FFFFFF;
+  --color-surfacealt: #F1F5F9;
+  --color-border: #E2E8F0;
+  --color-ink: #0F172A;
+  --color-muted: #64748B;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-base text-ink font-body antialiased;
+}
+
+h1, h2, h3, h4 {
+  @apply font-display;
+}
+
+/* Signature motif: LED-style status dot used across the site for
+   stock status and repair status. A real functional indicator,
+   not decoration. */
+.led-dot {
+  @apply inline-block w-2.5 h-2.5 rounded-full relative;
+}
+.led-dot::after {
+  content: "";
+  @apply absolute inset-0 rounded-full;
+  box-shadow: 0 0 0 3px currentColor;
+  opacity: 0.18;
+}
+.led-pending { @apply text-alert bg-alert; }
+.led-progress { @apply text-signal bg-signal; }
+.led-progress::after { animation: pulse-ring 1.6s ease-out infinite; }
+.led-completed { @apply text-circuit bg-circuit; }
+.led-instock { @apply text-circuit bg-circuit; }
+.led-outofstock { @apply text-alert bg-alert; }
+.led-limited { @apply text-amber bg-amber; }
+
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 currentColor; opacity: 0.35; }
+  100% { box-shadow: 0 0 0 8px currentColor; opacity: 0; }
+}
+
+/* thin circuit-trace divider between sections */
+.trace-divider {
+  height: 1px;
+  background: repeating-linear-gradient(
+    90deg,
+    theme("colors.border") 0px,
+    theme("colors.border") 10px,
+    transparent 10px,
+    transparent 16px
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .led-progress::after { animation: none; }
+}
