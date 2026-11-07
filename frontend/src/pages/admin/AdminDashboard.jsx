@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import client from "../../api/client";
 import { StockBadge, RepairStatusBadge } from "../../components/StatusBadge";
+import SketchLoader from "../../components/SketchLoader";
 import { formatPrice } from "../../utils/format";
 
 const REPAIR_STATUSES = ["Pending", "In Progress", "Completed"];
@@ -12,6 +13,7 @@ export default function AdminDashboard() {
   const [products, setProducts] = useState([]);
   const [requests, setRequests] = useState([]);
   const [repairFilter, setRepairFilter] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const loadData = async () => {
     try {
@@ -33,6 +35,8 @@ export default function AdminDashboard() {
       });
     } catch (err) {
       console.error("Failed to load dashboard data:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -79,6 +83,14 @@ export default function AdminDashboard() {
     { label: "Pending Repair Requests", value: stats.pendingRepairs, highlight: true, link: "/admin/repairs" },
     { label: "Total Repair Requests", value: stats.totalRepairs, link: "/admin/repairs" },
   ];
+
+  if (loading) {
+    return (
+      <div className="py-24 flex justify-center">
+        <SketchLoader text="Loading dashboard data…" subtext="Deep Computer And Solution" size="md" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-12">

@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import client from "../api/client";
 import { StockBadge } from "../components/StatusBadge";
 import WhatsAppButton from "../components/WhatsAppButton";
+import SketchLoader from "../components/SketchLoader";
 import { formatPrice } from "../utils/format";
 
 export default function ProductDetail() {
@@ -14,7 +15,13 @@ export default function ProductDetail() {
     client.get(`/products/${id}`).then((res) => setProduct(res.data)).catch(() => {});
   }, [id]);
 
-  if (!product) return <p className="max-w-6xl mx-auto px-5 py-12 text-muted font-mono text-sm">Loading…</p>;
+  if (!product) {
+    return (
+      <div className="max-w-6xl mx-auto px-5 py-24 flex justify-center">
+        <SketchLoader text="Loading product details…" subtext="Deep Computer And Solution" size="md" />
+      </div>
+    );
+  }
 
   const image = product.images?.[activeImg]?.url;
 

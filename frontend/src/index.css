@@ -72,3 +72,54 @@ h1, h2, h3, h4 {
 @media (prefers-reduced-motion: reduce) {
   .led-progress::after { animation: none; }
 }
+
+/* Sketch loading animations */
+@keyframes sketch-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 15px rgba(255, 176, 32, 0.25);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(255, 176, 32, 0.45), 0 0 15px rgba(52, 199, 123, 0.25);
+  }
+}
+
+@keyframes sketch-scan {
+  0% {
+    transform: translateY(-120%);
+    opacity: 0;
+  }
+  40% {
+    opacity: 0.5;
+  }
+  80% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(120%);
+    opacity: 0;
+  }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-sketch-pulse {
+  animation: sketch-pulse 2.4s ease-in-out infinite;
+}
+
+.animate-sketch-scan {
+  animation: sketch-scan 2s ease-in-out infinite;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 7s linear infinite;
+}
+
+.animate-spin-reverse {
+  animation: spin-slow 11s linear infinite reverse;
+}
+

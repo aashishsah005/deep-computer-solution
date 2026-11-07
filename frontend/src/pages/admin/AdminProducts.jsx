@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import client from "../../api/client";
 import { StockBadge } from "../../components/StatusBadge";
+import SketchLoader from "../../components/SketchLoader";
 import { formatPrice } from "../../utils/format";
 
 const emptyForm = {
@@ -14,8 +15,9 @@ export default function AdminProducts() {
   const [files, setFiles] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const load = () => client.get("/products").then((res) => setProducts(res.data)).catch(() => {});
+  const load = () => client.get("/products").then((res) => setProducts(res.data)).catch(() => {}).finally(() => setLoading(false));
 
   useEffect(() => { load(); }, []);
 
@@ -126,8 +128,14 @@ export default function AdminProducts() {
         </div>
       </form>
 
-      {/* Mobile Products Card List */}
-      <div className="sm:hidden space-y-3">
+      {loading ? (
+        <div className="py-12 flex justify-center">
+          <SketchLoader size="sm" text="Loading product inventory…" />
+        </div>
+      ) : (
+        <>
+          {/* Mobile Products Card List */}
+          <div className="sm:hidden space-y-3">
         {products.map((p) => (
           <div key={p._id} className="bg-surface border border-border rounded-lg p-4 space-y-3">
             <div className="flex items-start justify-between gap-2">
@@ -204,6 +212,8 @@ export default function AdminProducts() {
           </tbody>
         </table>
       </div>
+      </>
+      )}
     </div>
   );
 }

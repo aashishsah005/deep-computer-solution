@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import client from "../api/client";
 import ProductCard from "../components/ProductCard";
 import WhatsAppButton from "../components/WhatsAppButton";
+import SketchLoader from "../components/SketchLoader";
 import storefrontImage from "../assets/storefront.jpg";
 
 const PATHS = [
@@ -28,12 +29,14 @@ const PATHS = [
 
 export default function Home() {
   const [featured, setFeatured] = useState([]);
+  const [loadingFeatured, setLoadingFeatured] = useState(true);
 
   useEffect(() => {
     client
       .get("/products")
       .then((res) => setFeatured(res.data.filter((p) => p.featured).slice(0, 4)))
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setLoadingFeatured(false));
   }, []);
 
   return (
@@ -107,21 +110,27 @@ export default function Home() {
         </div>
       </section>
 
-      {featured.length > 0 && (
-        <section className="max-w-6xl mx-auto px-5 pb-20">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-semibold">Featured this week</h2>
-            <Link to="/products" className="text-sm text-amber hover:underline">
-              View all →
-            </Link>
+      <section className="max-w-6xl mx-auto px-5 pb-20">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-semibold">Featured this week</h2>
+          <Link to="/products" className="text-sm text-amber hover:underline">
+            View all →
+          </Link>
+        </div>
+        {loadingFeatured ? (
+          <div className="py-12 flex justify-center">
+            <SketchLoader text="Loading featured machines…" subtext="Deep Computer And Solution" size="sm" />
           </div>
+        ) : featured.length > 0 ? (
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {featured.map((p) => (
               <ProductCard key={p._id} product={p} />
             ))}
           </div>
-        </section>
-      )}
+        ) : (
+          <p className="text-muted text-sm font-mono">No featured items at the moment.</p>
+        )}
+      </section>
     </div>
   );
 }
