@@ -1,7 +1,14 @@
 import axios from "axios";
 
+const rawBaseUrl = import.meta.env.VITE_API_URL?.trim();
+let baseURL = "/api";
+if (rawBaseUrl) {
+  const normalized = rawBaseUrl.replace(/\/+$/, "");
+  baseURL = normalized.endsWith("/api") ? normalized : `${normalized}/api`;
+}
+
 const client = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "/api",
+  baseURL,
 });
 
 // attach admin token if present
